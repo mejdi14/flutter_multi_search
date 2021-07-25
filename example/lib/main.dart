@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:example/SearchWidget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
   runApp(MyApp());
@@ -28,15 +31,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
   void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+    setState(() {});
   }
 
-  var listSearch = [];
+  final streamList = StreamController<List<String>>();
+
+  var listSearch = <String>[];
 
   @override
   Widget build(BuildContext context) {
@@ -44,18 +45,48 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(child: Container()),
-              Container(
-                width: 40,
-                child: Icon(Icons.add),
-              )
-            ],
-          )
-        ],
+      body: Container(
+        height: 50,
+            width: MediaQuery.of(context).size.width,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                     Container(
+                       width: MediaQuery.of(context).size.width - 40,
+                      height: 50,
+                      child: StreamBuilder(
+                          stream: streamList.stream,
+                          builder:
+                              (context, AsyncSnapshot<List<String>>? snapshot) {
+                            return ListView(
+                                shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                children:
+                                    ((snapshot != null && snapshot.data != null)
+                                        ? ((snapshot.data?.isNotEmpty ?? false)
+                                            ? (snapshot.data
+                                                ?.map((e) => Text(e))
+                                                .toList())
+                                            : [])
+                                        : []) ?? []);
+                          }),
+                    ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    width: 40,
+                    child: GestureDetector(
+                        onTap: () {
+                          listSearch.add('hello');
+                          streamList.sink.add(listSearch);
+                        },
+                        child: Icon(Icons.add)),
+                  ),
+                )
+              ],
+        ),
       ),
     );
   }
