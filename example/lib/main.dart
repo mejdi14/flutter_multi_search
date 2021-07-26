@@ -30,14 +30,36 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void _incrementCounter() {
     setState(() {});
   }
 
+  late AnimationController _controller;
+  late Animation _animation;
   final streamList = StreamController<List<String>>();
-
+  late ScrollController _scrollController;
   var listSearch = <String>[];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
+    _scrollController = new ScrollController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    _animation = Tween(begin: 0.0, end: MediaQuery.of(context).size.width - 40)
+        .animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.fastOutSlowIn,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,48 +67,86 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Container(
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 48.0),
+        child: Row(
           children: [
             Container(
-              width: MediaQuery.of(context).size.width - 40,
               height: 50,
-              child: StreamBuilder(
-                  stream: streamList.stream,
-                  builder: (context, AsyncSnapshot<List<String>>? snapshot) {
-                    return ListView(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        children: ((snapshot != null && snapshot.data != null)
-                                ? ((snapshot.data?.isNotEmpty ?? false)
-                                    ? (snapshot.data
-                                        ?.map((e) => Text(e))
-                                        .toList())
-                                    : [])
-                                : []) ??
-                            []);
-                  }),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 40,
-                child: GestureDetector(
-                    onTap: () {
-                      listSearch.add('hello');
-                      streamList.sink.add(listSearch);
-                    },
-                    child: Icon(Icons.add)),
+              width: MediaQuery.of(context).size.width - 40,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                controller: _scrollController,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width - 40,
+                    height: 50,
+                    child: StreamBuilder(
+                        stream: streamList.stream,
+                        builder:
+                            (context, AsyncSnapshot<List<String>>? snapshot) {
+                          return ListView(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              children: ((snapshot != null &&
+                                  snapshot.data != null)
+                                  ? ((snapshot.data?.isNotEmpty ?? false)
+                                  ? (snapshot.data
+                                  ?.map((e) => Text(e))
+                                  .toList())
+                                  : [])
+                                  : []) ??
+                                  []);
+                        }),
+                  ),
+                  AnimatedBuilder(
+                      animation: _controller,
+                      builder: (BuildContext context, Widget? child) {
+                        return Container(
+                            padding: EdgeInsets.only(left: 20),
+                            width: MediaQuery.of(context).size.width - 40,
+                            child: new TextField(
+                                onSubmitted: _submitContent,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Search"),
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 25)));
+                      }),
+                ],
               ),
+            ),
+            Container(
+              width: 40,
+              child: GestureDetector(
+                  onTap: () {
+                    //listSearch.add('hello');
+                    //streamList.sink.add(listSearch);
+                    print('clicked');
+                    _controller.forward();
+                    _moveScrollToEnd();
+                  },
+                  child: Icon(Icons.add)),
             )
           ],
         ),
       ),
     );
+  }
+
+  void _submitContent(String value) {
+    listSearch.add('hello');
+    streamList.sink.add(listSearch);
+    _controller.reverse();
+  }
+
+  void _moveScrollToEnd() {
+    new Future.delayed(Duration(seconds: 0), () {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 850), curve: Curves.ease);
+    });
   }
 }
