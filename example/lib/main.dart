@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   var listSearch = <String>[];
   late TextEditingController _inputController;
+  bool isSearch = true;
 
   @override
   void initState() {
@@ -88,8 +89,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                           snapshot.data != null)
                                       ? ((snapshot.data?.isNotEmpty ?? false)
                                           ? (snapshot.data
-                                              ?.map((e) =>
-                                                  SearchItem(label: 'hello'))
+                                              ?.map((e) => SearchItem(
+                                                    label: e,
+                                                    onTap: () {
+                                                      removeItem(e);
+                                                    },
+                                                  ))
                                               .toList())
                                           : [])
                                       : []) ??
@@ -121,7 +126,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
                     print('clicked');
                     _iconAnimationController.forward();
-                    _moveScrollToEnd();
+                    isSearch ? _moveScrollToEnd() : _moveScrollToStart();
 
                     //_moveScrollToEnd();
                   },
@@ -145,6 +150,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _moveScrollToEnd() {
+    isSearch = !isSearch;
     new Future.delayed(Duration(seconds: 0), () {
       _scrollController.animateTo(_scrollController.position.maxScrollExtent,
           duration: Duration(milliseconds: 850), curve: Curves.ease);
@@ -152,6 +158,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _moveScrollToStart() {
+    isSearch = !isSearch;
     new Future.delayed(Duration(seconds: 0), () {
       _scrollController
           .animateTo(_scrollController.position.minScrollExtent,
@@ -162,5 +169,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   clearInputField() {
     _inputController.text = '';
+  }
+
+  void removeItem(String e) {
+    listSearch.remove(e);
+    streamList.sink.add(listSearch);
   }
 }
