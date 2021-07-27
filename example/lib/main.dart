@@ -81,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
                 controller: _scrollController,
+                physics: NeverScrollableScrollPhysics(),
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width - 40,
@@ -103,10 +104,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                   []);
                         }),
                   ),
-                  if(showInput)
+                  if(true)
                   Container(
                             padding: EdgeInsets.only(left: 20),
-                            width: _animation.value,
+                            width: MediaQuery.of(context).size.width - 40,
                             child: new TextField(
                                 onSubmitted: _submitContent,
                                 decoration: InputDecoration(
@@ -126,10 +127,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   onTap: () {
                     //listSearch.add('hello');
                     //streamList.sink.add(listSearch);
-                    showInput = true;
-                    setState(() {
 
-                    });
                     print('clicked');
                     _iconAnimationController.forward();
                     _moveScrollToEnd();
