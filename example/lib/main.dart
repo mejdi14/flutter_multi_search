@@ -31,9 +31,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-  void _incrementCounter() {
-    setState(() {});
-  }
 
   var showInput;
   late AnimationController _iconAnimationController;
@@ -45,7 +42,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    showInput = true;
     _iconAnimationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
@@ -104,7 +100,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                   []);
                         }),
                   ),
-                  if (showInput)
                     Container(
                         padding: EdgeInsets.only(left: 20),
                         width: MediaQuery.of(context).size.width - 40,
@@ -128,9 +123,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
                     print('clicked');
                     _iconAnimationController.forward();
-                    setState(() {
-                      showInput = true;
-                    });
                     _moveScrollToEnd();
 
                     //_moveScrollToEnd();
@@ -171,14 +163,19 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       'hello'
     ]);
     streamList.sink.add(listSearch);
-    setState(() {
-      showInput = false;
-    });
+    _moveScrollToStart();
   }
 
   void _moveScrollToEnd() {
     new Future.delayed(Duration(seconds: 0), () {
       _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: Duration(milliseconds: 850), curve: Curves.ease);
+    });
+  }
+
+  void _moveScrollToStart() {
+    new Future.delayed(Duration(seconds: 0), () {
+      _scrollController.animateTo(_scrollController.position.minScrollExtent,
           duration: Duration(milliseconds: 850), curve: Curves.ease);
     });
   }
