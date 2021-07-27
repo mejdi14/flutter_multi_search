@@ -46,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     // TODO: implement initState
     super.initState();
     _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 2000));
+        AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
   }
 
@@ -104,8 +104,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       animation: _controller,
                       builder: (BuildContext context, Widget? child) {
                         return Container(
+
                             padding: EdgeInsets.only(left: 20),
-                            width: MediaQuery.of(context).size.width - 40,
+                            width: _animation.value,
                             child: new TextField(
                                 onSubmitted: _submitContent,
                                 decoration: InputDecoration(
@@ -141,6 +142,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     listSearch.add('hello');
     streamList.sink.add(listSearch);
     _controller.reverse();
+
   }
 
   void _moveScrollToEnd() {
