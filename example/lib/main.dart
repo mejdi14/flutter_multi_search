@@ -40,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late TextEditingController _inputController;
   late FocusNode focusNode;
   bool isSearch = true;
+  final ValueNotifier<bool> _isSearchIcon = ValueNotifier<bool>(true);
 
   @override
   void initState() {
@@ -121,20 +122,23 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               ),
             ),
             Container(
-              width: 40,
-              child: GestureDetector(
+                width: 40,
+                child: GestureDetector(
                   onTap: () {
                     _iconAnimationController.forward();
                     isSearch ? startNewSearch() : exitSearch();
 
                     //_moveScrollToEnd();
                   },
-                  child: AnimatedIcon(
-                    icon: AnimatedIcons.search_ellipsis,
-                    color: Colors.black,
-                    progress: _iconAnimationController,
-                  )),
-            )
+                  child: ValueListenableBuilder<bool>(
+                      valueListenable: _isSearchIcon,
+                      builder:
+                          (BuildContext context, bool value, Widget? child) {
+                        return Icon(
+                          value ? Icons.search : Icons.close,
+                        );
+                      }),
+                ))
           ],
         ),
       ),
@@ -144,7 +148,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void _submitContent(String value) {
     listSearch.add(value);
     streamList.sink.add(listSearch);
-
     _moveScrollToStart();
   }
 
@@ -176,11 +179,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   startNewSearch() {
+    _isSearchIcon.value = false;
     focusNode.requestFocus();
     _moveScrollToEnd();
   }
 
   exitSearch() {
+    _isSearchIcon.value = true;
     focusNode.unfocus();
     _moveScrollToStart();
   }
