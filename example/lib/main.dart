@@ -102,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       child: new TextField(
                           controller: _inputController,
                           onSubmitted: _submitContent,
+                          textInputAction: TextInputAction.search,
                           decoration: InputDecoration(
                               border: InputBorder.none, hintText: "Search"),
                           style: TextStyle(
