@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:example/SearchWidget.dart';
+import 'package:example/search_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -31,7 +32,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
-
   var showInput;
   late AnimationController _iconAnimationController;
   final streamList = StreamController<List<String>>();
@@ -86,31 +86,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                           snapshot.data != null)
                                       ? ((snapshot.data?.isNotEmpty ?? false)
                                           ? (snapshot.data
-                                              ?.map((e) => Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 25,
-                                                      ),
-                                                      Text(e),
-                                                    ],
-                                                  ))
+                                              ?.map((e) =>
+                                                  SearchItem(label: 'hello'))
                                               .toList())
                                           : [])
                                       : []) ??
                                   []);
                         }),
                   ),
-                    Container(
-                        padding: EdgeInsets.only(left: 20),
-                        width: MediaQuery.of(context).size.width - 40,
-                        child: new TextField(
-                            onSubmitted: _submitContent,
-                            decoration: InputDecoration(
-                                border: InputBorder.none, hintText: "Search"),
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 25)))
+                  Container(
+                      padding: EdgeInsets.only(left: 20),
+                      width: MediaQuery.of(context).size.width - 40,
+                      child: new TextField(
+                          onSubmitted: _submitContent,
+                          decoration: InputDecoration(
+                              border: InputBorder.none, hintText: "Search"),
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25)))
                 ],
               ),
             ),
@@ -143,24 +137,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     listSearch.addAll([
       'hello',
       'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello',
-      'hello'
     ]);
     streamList.sink.add(listSearch);
     _moveScrollToStart();
