@@ -23,7 +23,6 @@ class _SearchWidget extends State<SearchWidget> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     double _iconSize = MediaQuery.of(context).size.height * 0.05;
-
     _animation = Tween(
             begin: 0.0, end: MediaQuery.of(context).size.width - _iconSize - 30)
         .animate(CurvedAnimation(
@@ -36,7 +35,7 @@ class _SearchWidget extends State<SearchWidget> with TickerProviderStateMixin {
       new AnimatedBuilder(
           animation: _controller!,
           builder: (BuildContext context, Widget? child) {
-            return  Container(
+            return Container(
                 padding: EdgeInsets.only(left: 20),
                 width: _animation!.value,
                 child: new TextField(
@@ -52,16 +51,15 @@ class _SearchWidget extends State<SearchWidget> with TickerProviderStateMixin {
       new Container(
           child: new InkWell(
         splashColor: Colors.transparent,
-        child: new Icon((_visible ?? false) ? Icons.close : Icons.search, size: _iconSize),
+        child: new Icon((_visible ?? false) ? Icons.close : Icons.search,
+            size: _iconSize),
         onTap: _showTextField,
       ))
     ]));
   }
 
   void _submitContent(String content) {
-
-      _showTextField();
-//      print("dizer que não deu");
+    _showTextField();
   }
 
   void _hideAndClearKeyboard() {
@@ -71,12 +69,10 @@ class _SearchWidget extends State<SearchWidget> with TickerProviderStateMixin {
 
   void _showTextField() async {
     setState(() {});
-
     if (_visible == true)
       _controller?.reverse();
     else
       _controller?.forward();
-
     _hideAndClearKeyboard();
     _visible = !(_visible ?? false);
   }

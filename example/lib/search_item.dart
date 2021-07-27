@@ -14,10 +14,13 @@ class _SearchItemState extends State<SearchItem> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(width: 4,),
+        SizedBox(width: 10,),
         Text(widget.label, style: TextStyle(fontSize: 20),),
         SizedBox(width: 4,),
-        Icon(Icons.close, size: 15,)
+        InkWell(onTap: (){
+          print('nice');
+        },
+            child: Icon(Icons.close, size: 15,))
       ],
     );
   }
