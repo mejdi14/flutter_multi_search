@@ -36,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   late AnimationController _controller;
+  late AnimationController _iconAnimationController;
   late Animation _animation;
   final streamList = StreamController<List<String>>();
   late ScrollController _scrollController;
@@ -45,8 +46,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 1000));
+    _controller = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1000));
+    _iconAnimationController = AnimationController(
+        vsync: this, duration: Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
   }
 
@@ -90,13 +93,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
                               children: ((snapshot != null &&
-                                  snapshot.data != null)
-                                  ? ((snapshot.data?.isNotEmpty ?? false)
-                                  ? (snapshot.data
-                                  ?.map((e) => Text(e))
-                                  .toList())
-                                  : [])
-                                  : []) ??
+                                          snapshot.data != null)
+                                      ? ((snapshot.data?.isNotEmpty ?? false)
+                                          ? (snapshot.data
+                                              ?.map((e) => Text(e))
+                                              .toList())
+                                          : [])
+                                      : []) ??
                                   []);
                         }),
                   ),
@@ -104,7 +107,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       animation: _controller,
                       builder: (BuildContext context, Widget? child) {
                         return Container(
-
                             padding: EdgeInsets.only(left: 20),
                             width: _animation.value,
                             child: new TextField(
@@ -127,10 +129,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     //listSearch.add('hello');
                     //streamList.sink.add(listSearch);
                     print('clicked');
-                    _controller.forward();
-                    _moveScrollToEnd();
+                    _iconAnimationController.forward();
+                    _controller
+                        .forward()
+                        .whenComplete(() => _moveScrollToEnd());
+                    //_moveScrollToEnd();
                   },
-                  child: Icon(Icons.add)),
+                  child: AnimatedIcon(
+                    icon: AnimatedIcons.ellipsis_search,
+                    color: Colors.black,
+                    progress: _iconAnimationController,
+                  )),
             )
           ],
         ),
@@ -142,7 +151,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     listSearch.add('hello');
     streamList.sink.add(listSearch);
     _controller.reverse();
-
   }
 
   void _moveScrollToEnd() {
