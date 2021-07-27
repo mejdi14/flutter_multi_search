@@ -34,10 +34,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void _incrementCounter() {
     setState(() {});
   }
-  var showInput = false;
-  late AnimationController _controller;
+
+  var showInput;
   late AnimationController _iconAnimationController;
-  late Animation _animation;
   final streamList = StreamController<List<String>>();
   late ScrollController _scrollController;
   var listSearch = <String>[];
@@ -46,8 +45,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _controller = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
+    showInput = true;
     _iconAnimationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
@@ -57,11 +55,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    _animation = Tween(begin: 0.0, end: MediaQuery.of(context).size.width - 40)
-        .animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.fastOutSlowIn,
-    ));
   }
 
   @override
@@ -97,27 +90,32 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                           snapshot.data != null)
                                       ? ((snapshot.data?.isNotEmpty ?? false)
                                           ? (snapshot.data
-                                              ?.map((e) => Text(e))
+                                              ?.map((e) => Row(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 25,
+                                                      ),
+                                                      Text(e),
+                                                    ],
+                                                  ))
                                               .toList())
                                           : [])
                                       : []) ??
                                   []);
                         }),
                   ),
-                  if(true)
-                  Container(
-                            padding: EdgeInsets.only(left: 20),
-                            width: MediaQuery.of(context).size.width - 40,
-                            child: new TextField(
-                                onSubmitted: _submitContent,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Search"),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 25)))
-
+                  if (showInput)
+                    Container(
+                        padding: EdgeInsets.only(left: 20),
+                        width: MediaQuery.of(context).size.width - 40,
+                        child: new TextField(
+                            onSubmitted: _submitContent,
+                            decoration: InputDecoration(
+                                border: InputBorder.none, hintText: "Search"),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 25)))
                 ],
               ),
             ),
@@ -130,6 +128,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
                     print('clicked');
                     _iconAnimationController.forward();
+                    setState(() {
+                      showInput = true;
+                    });
                     _moveScrollToEnd();
 
                     //_moveScrollToEnd();
@@ -147,9 +148,32 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _submitContent(String value) {
-    listSearch.add('hello');
+    listSearch.addAll([
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello',
+      'hello'
+    ]);
     streamList.sink.add(listSearch);
-    _controller.reverse();
+    setState(() {
+      showInput = false;
+    });
   }
 
   void _moveScrollToEnd() {
