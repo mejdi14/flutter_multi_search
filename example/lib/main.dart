@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void _incrementCounter() {
     setState(() {});
   }
-
+  var showInput = false;
   late AnimationController _controller;
   late AnimationController _iconAnimationController;
   late Animation _animation;
@@ -103,10 +103,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                   []);
                         }),
                   ),
-                  AnimatedBuilder(
-                      animation: _controller,
-                      builder: (BuildContext context, Widget? child) {
-                        return Container(
+                  if(showInput)
+                  Container(
                             padding: EdgeInsets.only(left: 20),
                             width: _animation.value,
                             child: new TextField(
@@ -117,8 +115,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 25)));
-                      }),
+                                    fontSize: 25)))
+
                 ],
               ),
             ),
@@ -128,15 +126,18 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   onTap: () {
                     //listSearch.add('hello');
                     //streamList.sink.add(listSearch);
+                    showInput = true;
+                    setState(() {
+
+                    });
                     print('clicked');
                     _iconAnimationController.forward();
-                    _controller
-                        .forward()
-                        .whenComplete(() => _moveScrollToEnd());
+                    _moveScrollToEnd();
+
                     //_moveScrollToEnd();
                   },
                   child: AnimatedIcon(
-                    icon: AnimatedIcons.ellipsis_search,
+                    icon: AnimatedIcons.search_ellipsis,
                     color: Colors.black,
                     progress: _iconAnimationController,
                   )),
