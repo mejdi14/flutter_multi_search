@@ -124,7 +124,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               width: 40,
               child: GestureDetector(
                   onTap: () {
-                    print('clicked');
                     _iconAnimationController.forward();
                     isSearch ? startNewSearch() : exitSearch();
 
