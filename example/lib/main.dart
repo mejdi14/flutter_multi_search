@@ -38,6 +38,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   late ScrollController _scrollController;
   var listSearch = <String>[];
   late TextEditingController _inputController;
+  late FocusNode focusNode;
   bool isSearch = true;
 
   @override
@@ -48,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         vsync: this, duration: Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
     _inputController = TextEditingController();
+    focusNode = FocusNode();
   }
 
   @override
@@ -107,6 +109,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       child: new TextField(
                           controller: _inputController,
                           onSubmitted: _submitContent,
+                          focusNode: focusNode,
                           textInputAction: TextInputAction.search,
                           decoration: InputDecoration(
                               border: InputBorder.none, hintText: "Search"),
@@ -121,12 +124,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               width: 40,
               child: GestureDetector(
                   onTap: () {
-                    //listSearch.add('hello');
-                    //streamList.sink.add(listSearch);
-
                     print('clicked');
                     _iconAnimationController.forward();
-                    isSearch ? _moveScrollToEnd() : _moveScrollToStart();
+                    isSearch ? startNewSearch() : exitSearch();
 
                     //_moveScrollToEnd();
                   },
@@ -174,5 +174,15 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void removeItem(String e) {
     listSearch.remove(e);
     streamList.sink.add(listSearch);
+  }
+
+  startNewSearch() {
+    focusNode.requestFocus();
+    _moveScrollToEnd();
+  }
+
+  exitSearch() {
+    focusNode.unfocus();
+    _moveScrollToStart();
   }
 }
