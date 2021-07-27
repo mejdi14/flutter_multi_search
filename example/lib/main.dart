@@ -37,6 +37,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final streamList = StreamController<List<String>>();
   late ScrollController _scrollController;
   var listSearch = <String>[];
+  late TextEditingController _inputController;
 
   @override
   void initState() {
@@ -45,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _iconAnimationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
+    _inputController = TextEditingController();
   }
 
   @override
@@ -98,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       padding: EdgeInsets.only(left: 20),
                       width: MediaQuery.of(context).size.width - 40,
                       child: new TextField(
+                          controller: _inputController,
                           onSubmitted: _submitContent,
                           decoration: InputDecoration(
                               border: InputBorder.none, hintText: "Search"),
@@ -134,11 +137,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _submitContent(String value) {
-    listSearch.addAll([
-      'hello',
-      'hello',
-    ]);
+    listSearch.add(value);
     streamList.sink.add(listSearch);
+
     _moveScrollToStart();
   }
 
@@ -151,8 +152,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   void _moveScrollToStart() {
     new Future.delayed(Duration(seconds: 0), () {
-      _scrollController.animateTo(_scrollController.position.minScrollExtent,
-          duration: Duration(milliseconds: 850), curve: Curves.ease);
+      _scrollController
+          .animateTo(_scrollController.position.minScrollExtent,
+              duration: Duration(milliseconds: 850), curve: Curves.ease)
+          .whenComplete(() => clearInputField());
     });
+  }
+
+  clearInputField() {
+    _inputController.text = '';
   }
 }
