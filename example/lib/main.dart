@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:example/SearchWidget.dart';
 import 'package:example/search_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -146,7 +145,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void _submitContent(String value) {
     listSearch.add(value);
     streamList.sink.add(listSearch);
-    isSearch = !isSearch;
+    _isSearchIcon.value = true;
     _moveScrollToStart();
   }
 
