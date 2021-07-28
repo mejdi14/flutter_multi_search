@@ -34,9 +34,9 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   var showInput;
   late AnimationController _iconAnimationController;
-  final streamList = StreamController<List<String>>();
+  final streamList = StreamController<List<Searchable>>();
   late ScrollController _scrollController;
-  var listSearch = <String>[];
+  var listSearch = <Searchable>[];
   late TextEditingController _inputController;
   late FocusNode focusNode;
   bool isSearch = true;
@@ -83,8 +83,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     height: 50,
                     child: StreamBuilder(
                         stream: streamList.stream,
-                        builder:
-                            (context, AsyncSnapshot<List<String>>? snapshot) {
+                        builder: (context,
+                            AsyncSnapshot<List<Searchable>>? snapshot) {
                           return ListView(
                               shrinkWrap: true,
                               scrollDirection: Axis.horizontal,
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                           ? (snapshot.data
                                               ?.map((e) => SearchItem(
                                                     data: Searchable(
-                                                        label: e,
+                                                        label: e.label,
                                                         isSelected:
                                                             ValueNotifier<bool>(
                                                                 false)),
@@ -148,7 +148,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _submitContent(String value) {
-    listSearch.add(value);
+    listSearch
+        .add(Searchable(label: value, isSelected: ValueNotifier<bool>(true)));
     streamList.sink.add(listSearch);
     _isSearchIcon.value = true;
     _moveScrollToStart();
@@ -176,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     _inputController.text = '';
   }
 
-  void removeItem(String e) {
+  void removeItem(Searchable e) {
     listSearch.remove(e);
     streamList.sink.add(listSearch);
   }
