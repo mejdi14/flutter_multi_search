@@ -71,8 +71,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
         child: Row(
           children: [
             Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width - 40,
+              height: 60,
+              width: MediaQuery.of(context).size.width - 60,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 shrinkWrap: true,
@@ -80,8 +80,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 physics: NeverScrollableScrollPhysics(),
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width - 40,
-                    height: 50,
+                    width: MediaQuery.of(context).size.width - 60,
+                    height: 60,
                     child: StreamBuilder(
                         stream: _streamList.stream,
                         builder: (context,
@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   ),
                   Container(
                       padding: EdgeInsets.only(left: 20),
-                      width: MediaQuery.of(context).size.width - 40,
+                      width: MediaQuery.of(context).size.width - 60,
                       child: new TextField(
                           controller: _inputController,
                           onSubmitted: _submitContent,
@@ -129,13 +129,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               ),
             ),
             Container(
-                width: 40,
-                child: GestureDetector(
-                  onTap: () {
+              height: 60,
+              width: 60,
+              child: GestureDetector(
+                onTap: () {
                     _iconAnimationController.forward();
                     isSearch ? startNewSearch() : exitSearch();
                   },
-                  child: ValueListenableBuilder<bool>(
+                child: ValueListenableBuilder<bool>(
                       valueListenable: _isSearchIcon,
                       builder:
                           (BuildContext context, bool value, Widget? child) {
@@ -143,7 +144,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                           value ? Icons.search : Icons.close,
                         );
                       }),
-                ))
+              ),
+            )
           ],
         ),
       ),
