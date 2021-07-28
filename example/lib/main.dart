@@ -31,7 +31,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -46,8 +45,17 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
-          SizedBox(height: 40,),
-          MultiSearchView()
+          SizedBox(
+            height: 40,
+          ),
+          MultiSearchView(
+            onSelectItem: (value) {
+              print(value);
+            },
+            onSearchComplete: (value){
+              print(value);
+            },
+          )
         ],
       ),
     );
