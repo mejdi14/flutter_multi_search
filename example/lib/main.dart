@@ -34,11 +34,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   var showInput;
   late AnimationController _iconAnimationController;
-  final streamList = StreamController<List<Searchable>>();
+  late StreamController<List<Searchable>> _streamList;
   late ScrollController _scrollController;
   var listSearch = <Searchable>[];
   late TextEditingController _inputController;
-  late FocusNode focusNode;
+  late FocusNode _focusNode;
   bool isSearch = true;
   final ValueNotifier<bool> _isSearchIcon = ValueNotifier<bool>(true);
 
@@ -46,11 +46,12 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _streamList = StreamController<List<Searchable>>();
     _iconAnimationController = AnimationController(
         vsync: this, duration: Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
     _inputController = TextEditingController();
-    focusNode = FocusNode();
+    _focusNode = FocusNode();
   }
 
   @override
@@ -82,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     width: MediaQuery.of(context).size.width - 40,
                     height: 50,
                     child: StreamBuilder(
-                        stream: streamList.stream,
+                        stream: _streamList.stream,
                         builder: (context,
                             AsyncSnapshot<List<Searchable>>? snapshot) {
                           return ListView(
@@ -97,8 +98,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                                         label: e.label,
                                                         isSelected:
                                                             e.isSelected),
-                                                    onTap: () {
+                                                    onDelete: () {
                                                       removeItem(e);
+                                                    },
+                                                    onSelect: (data) {
+                                                      selectItem(e);
                                                     },
                                                   ))
                                               .toList())
@@ -113,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       child: new TextField(
                           controller: _inputController,
                           onSubmitted: _submitContent,
-                          focusNode: focusNode,
+                          focusNode: _focusNode,
                           textInputAction: TextInputAction.search,
                           decoration: InputDecoration(
                               border: InputBorder.none, hintText: "Search"),
@@ -150,14 +154,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     await resetItemIndicator();
     listSearch
         .add(Searchable(label: value, isSelected: ValueNotifier<bool>(true)));
-    streamList.sink.add(listSearch);
+    _streamList.sink.add(listSearch);
     _isSearchIcon.value = true;
     _moveScrollToStart();
   }
 
-  Future<void> resetItemIndicator() async{
+  Future<void> resetItemIndicator() async {
     listSearch.forEach((e) {
-      if(e.isSelected?.value == true){
+      if (e.isSelected?.value == true) {
         e.isSelected?.value = false;
       }
     });
@@ -187,18 +191,37 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
 
   void removeItem(Searchable e) {
     listSearch.remove(e);
-    streamList.sink.add(listSearch);
+    _streamList.sink.add(listSearch);
   }
 
   startNewSearch() {
     _isSearchIcon.value = false;
-    focusNode.requestFocus();
+    _focusNode.requestFocus();
     _moveScrollToEnd();
   }
 
   exitSearch() {
     _isSearchIcon.value = true;
-    focusNode.unfocus();
+    _focusNode.unfocus();
     _moveScrollToStart();
+  }
+
+  Future<void> selectItem(Searchable e) async {
+    await resetItemIndicator();
+    listSearch.firstWhere((item) {
+      return e == item;
+    })
+      ..isSelected = ValueNotifier<bool>(true);
+    _streamList.sink.add(listSearch);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _streamList.sink.close();
+    _iconAnimationController.dispose();
+    _scrollController.dispose();
+    _focusNode.dispose();
   }
 }

@@ -3,17 +3,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SearchItem extends StatefulWidget {
-  const SearchItem({Key? key, required this.data, required this.onTap})
+  const SearchItem(
+      {Key? key,
+      required this.data,
+      required this.onDelete,
+      required this.onSelect})
       : super(key: key);
   final Searchable data;
-  final Function onTap;
+  final Function onDelete;
+  final Function onSelect;
 
   @override
   _SearchItemState createState() => _SearchItemState();
 }
 
 class _SearchItemState extends State<SearchItem> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,6 +27,7 @@ class _SearchItemState extends State<SearchItem> {
           onTap: () {
             widget.data.isSelected?.value =
                 !(widget.data.isSelected?.value ?? false);
+            widget.onSelect(widget.data);
           },
           child: Row(
             children: [
@@ -39,7 +44,7 @@ class _SearchItemState extends State<SearchItem> {
               InkWell(
                   onTap: () {
                     print('nice');
-                    widget.onTap();
+                    widget.onDelete();
                   },
                   child: Icon(
                     Icons.close,
