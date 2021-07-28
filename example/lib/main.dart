@@ -127,8 +127,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   onTap: () {
                     _iconAnimationController.forward();
                     isSearch ? startNewSearch() : exitSearch();
-
-                    //_moveScrollToEnd();
                   },
                   child: ValueListenableBuilder<bool>(
                       valueListenable: _isSearchIcon,
@@ -148,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   void _submitContent(String value) {
     listSearch.add(value);
     streamList.sink.add(listSearch);
+    isSearch = !isSearch;
     _moveScrollToStart();
   }
 
