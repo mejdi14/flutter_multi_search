@@ -1,6 +1,6 @@
-import 'package:example/searchable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_search_flutter/searchable.dart';
 
 class SearchItem extends StatefulWidget {
   const SearchItem(
