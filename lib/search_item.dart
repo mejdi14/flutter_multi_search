@@ -46,7 +46,6 @@ class _SearchItemState extends State<SearchItem> {
                 ),
                 InkWell(
                     onTap: () {
-                      print('nice');
                       widget.onDelete();
                     },
                     child: Icon(

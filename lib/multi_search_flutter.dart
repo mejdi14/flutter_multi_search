@@ -13,12 +13,16 @@ class MultiSearchView extends StatefulWidget {
       this.iconColor,
       this.width,
       required this.onSelectItem,
-      required this.onSearchComplete})
+      required this.onSearchComplete,
+      required this.onDeleteItem,
+      required this.onItemChanged})
       : super(key: key);
   final String? inputHint;
   final Color? iconColor;
   final Function onSelectItem;
   final Function onSearchComplete;
+  final Function onDeleteItem;
+  final Function onItemChanged;
   final double? width;
 
   @override
@@ -86,7 +90,11 @@ class _MultiSearchViewState extends State<MultiSearchView>
                                                     label: e.label,
                                                     isSelected: e.isSelected),
                                                 onDelete: () {
-                                                  removeItem(e);
+                                                  var pos = removeItem(e);
+                                                  widget.onDeleteItem(e.label);
+                                                  if (pos > -1)
+                                                    widget.onItemChanged(
+                                                        listSearch[pos].label);
                                                 },
                                                 onSelect: (data) {
                                                   selectItem(e);
@@ -105,7 +113,7 @@ class _MultiSearchViewState extends State<MultiSearchView>
                       (widget.width ?? MediaQuery.of(context).size.width) - 60,
                   child: new TextField(
                       controller: _inputController,
-                      onSubmitted:(value){
+                      onSubmitted: (value) {
                         _submitContent(value);
                         widget.onSearchComplete(value);
                       },
@@ -182,17 +190,21 @@ class _MultiSearchViewState extends State<MultiSearchView>
     _inputController.text = '';
   }
 
-  void removeItem(Searchable e) {
-    if(listSearch.length > 1){
-     var deletedPosition = listSearch.indexOf(e);
-     if(deletedPosition == 0){
-       listSearch[1].isSelected = ValueNotifier<bool>(true);
-     }else{
-       listSearch[deletedPosition - 1].isSelected = ValueNotifier<bool>(true);
-     }
+  int removeItem(Searchable e) {
+    var newPosition = -1;
+    if (listSearch.length > 1) {
+      var deletedPosition = listSearch.indexOf(e);
+      if (deletedPosition == 0) {
+        listSearch[1].isSelected = ValueNotifier<bool>(true);
+        newPosition = 0;
+      } else {
+        newPosition = deletedPosition - 1;
+        listSearch[newPosition].isSelected = ValueNotifier<bool>(true);
+      }
     }
     listSearch.remove(e);
     _streamList.sink.add(listSearch);
+    return newPosition;
   }
 
   startNewSearch() {

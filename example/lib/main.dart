@@ -55,6 +55,12 @@ class _MyHomePageState extends State<MyHomePage> {
             onSearchComplete: (value){
               print(value);
             },
+            onDeleteItem: (value){
+              print(value);
+            },
+            onItemChanged: (value){
+              print(' on changed $value');
+            },
           )
         ],
       ),
