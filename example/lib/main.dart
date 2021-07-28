@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:example/search_item.dart';
+import 'package:example/searchable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -92,7 +93,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                       ? ((snapshot.data?.isNotEmpty ?? false)
                                           ? (snapshot.data
                                               ?.map((e) => SearchItem(
-                                                    label: e,
+                                                    data: Searchable(
+                                                        label: e,
+                                                        isSelected:
+                                                            ValueNotifier<bool>(
+                                                                false)),
                                                     onTap: () {
                                                       removeItem(e);
                                                     },
