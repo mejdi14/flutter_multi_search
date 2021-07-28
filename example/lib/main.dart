@@ -146,17 +146,21 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
-  void _submitContent(String value) {
-    listSearch.map((e) {
-      if(e.isSelected?.value == true)
-        e.isSelected?.value = false;
-      return e;
-    });
+  Future<void> _submitContent(String value) async {
+    await resetItemIndicator();
     listSearch
         .add(Searchable(label: value, isSelected: ValueNotifier<bool>(true)));
     streamList.sink.add(listSearch);
     _isSearchIcon.value = true;
     _moveScrollToStart();
+  }
+
+  Future<void> resetItemIndicator() async{
+    listSearch.forEach((e) {
+      if(e.isSelected?.value == true){
+        e.isSelected?.value = false;
+      }
+    });
   }
 
   void _moveScrollToEnd() {
