@@ -96,8 +96,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                                                     data: Searchable(
                                                         label: e.label,
                                                         isSelected:
-                                                            ValueNotifier<bool>(
-                                                                false)),
+                                                            e.isSelected),
                                                     onTap: () {
                                                       removeItem(e);
                                                     },
@@ -148,6 +147,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   }
 
   void _submitContent(String value) {
+    listSearch.map((e) {
+      if(e.isSelected?.value == true)
+        e.isSelected?.value = false;
+      return e;
+    });
     listSearch
         .add(Searchable(label: value, isSelected: ValueNotifier<bool>(true)));
     streamList.sink.add(listSearch);
