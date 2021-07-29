@@ -53,7 +53,31 @@ searchIndicatorShape: SearchIndicatorShape.dot
 /// or
 searchIndicatorShape: SearchIndicatorShape.line
 ```
-	
+indicator color:
+```
+indicatorColor: Colors.purple
+```
+changing the width (default is screen size width):
+```
+width: 150
+```
+changing the icon color:
+```
+iconColor: Colors.blue
+```
+changing the delete item icon color:
+```
+removeItemIconColor: Colors.black
+```
+changing the delete item icon color:
+```
+removeItemIconColor: Colors.black
+```
+setting the hint text:
+```
+inputHint: 'type your text'
+```
+... please check the class code for more options
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome.<br />
@@ -64,7 +88,7 @@ Feel free to check [issues page] if you want to contribute.<br />
 
 👤 **Mejdi Hafiane**
 
-- FaceBook: [@MejdiHafiane](https://www.facebook.com/mejdi.marshall)
+- Twitter: [@MejdiHafiane](https://twitter.com/mejdi141)
 
 ## Show your support
 
