@@ -1,7 +1,7 @@
 name: multi_search_flutter
-description: A new Flutter project.
+description: A new Flutter package for multi serach view.
 version: 0.0.1
-homepage:
+homepage: https://github.com/mejdi14/flutter_multi_search
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
