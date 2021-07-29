@@ -11,7 +11,10 @@ class MultiSearchView extends StatefulWidget {
       {Key? key,
       this.inputHint,
       this.iconColor,
+      this.hintTextStyle,
+      this.inputTextStyle,
       this.width,
+      this.slidingAnimationDuration,
       required this.onSelectItem,
       required this.onSearchComplete,
       required this.onDeleteItem,
@@ -19,11 +22,14 @@ class MultiSearchView extends StatefulWidget {
       : super(key: key);
   final String? inputHint;
   final Color? iconColor;
+  final TextStyle? hintTextStyle;
+  final TextStyle? inputTextStyle;
+  final double? width;
+  final Duration? slidingAnimationDuration;
   final Function onSelectItem;
   final Function onSearchComplete;
   final Function onDeleteItem;
   final Function onItemChanged;
-  final double? width;
 
   @override
   _MultiSearchViewState createState() => _MultiSearchViewState();
@@ -47,7 +53,9 @@ class _MultiSearchViewState extends State<MultiSearchView>
     super.initState();
     _streamList = StreamController<List<Searchable>>();
     _iconAnimationController = AnimationController(
-        vsync: this, duration: Duration(milliseconds: 1000));
+        vsync: this,
+        duration:
+            widget.slidingAnimationDuration ?? Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
     _inputController = TextEditingController();
     _focusNode = FocusNode();
@@ -121,11 +129,13 @@ class _MultiSearchViewState extends State<MultiSearchView>
                       textInputAction: TextInputAction.search,
                       decoration: InputDecoration(
                           border: InputBorder.none,
+                          hintStyle: widget.hintTextStyle,
                           hintText: widget.inputHint ?? "Search"),
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25)))
+                      style: widget.inputTextStyle ??
+                          TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22)))
             ],
           ),
         ),
