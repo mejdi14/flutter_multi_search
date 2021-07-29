@@ -17,6 +17,7 @@
 	
 ## :art:Credits
 - Many thanks to : [@Cuberto](https://dribbble.com/shots/3971202-Info-navigation) for the amazing [@design](https://dribbble.com/shots/5922034-Multi-search-by-categories) 
+- thanks to : [@Mert Şimşek](https://github.com/iammert) for the inspiration with the [@Android version](https://github.com/iammert/MultiSearchView)
 
 ## ✨ Demo
 <p align="center">
@@ -24,43 +25,33 @@
 	</p>
 	
 	
-## How to use
+## Basic usage
 ```
-//create your menu items
-List<FoldableCell> myCards = [
-    FoldableCell(color: Colors.yellow, label: 'close', icon: Icon(Icons.close)),
-    FoldableCell(
-        color: Colors.orange,
-        label: 'take photo',
-        icon: Icon(Icons.camera_alt)),
-    FoldableCell(
-        color: Colors.green,
-        label: 'share',
-        textColor: Colors.black,
-        icon: Icon(Icons.share)),
-    FoldableCell(color: Colors.purple, label: 'settings', icon: Icon(Icons.settings)),
-    FoldableCell(
-        color: Colors.blue,
-        label: 'verification',
-        icon: Icon(Icons.verified_user_rounded)),
-    FoldableCell(color: Colors.red, label: 'profile', icon: Icon(Icons.person))
-  ];
-  
-  // show your menu
-   Navigator.of(context).push(PageRouteBuilder(
-                              opaque: false,
-                              pageBuilder: (BuildContext context, _, __) =>
-                                  FoldableMenu(
-                                    myCards: myCards,
-                                    side: MenuSide.right,
-                                    textStyle: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                    onCardSelect: (cell, counter) {
-                                      print('this is :$cell');
-                                    },
-                                  )));
+MultiSearchView(
+              onSelectItem: (value) {
+                /// when you swith from an item to another
+              },
+              onSearchComplete: (value) {
+                /// when you hit the keyboard search button
+              },
+              onDeleteAlternative: (value) {
+                /// when you delete and item and it switchs to another item if exist
+              },
+              onItemDeleted: (value) {
+                /// when you delete an item
+              },
+              onSearchCleared: () {
+                /// when all search items are cleared
+              },
+            )
+```
+
+## Options
+choosing the indicator shape (default is line shape):
+```
+searchIndicatorShape: SearchIndicatorShape.dot
+/// or
+searchIndicatorShape: SearchIndicatorShape.line
 ```
 	
 ## 🤝 Contributing
