@@ -49,52 +49,61 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          SizedBox(
-            height: 40,
-          ),
-          MultiSearchView(
-            searchIndicatorShape: SearchIndicatorShape.dot,
-            onSelectItem: (value) {
-              filterList(value);
-            },
-            onSearchComplete: (value) {
-              filterList(value);
-            },
-            onDeleteAlternative: (value) {
-              filterList(value);
-            },
-            onItemDeleted: (value) {
-              print(value);
-            },
-            onSearchCleared: () {
-              removeFilter();
-            },
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Expanded(
-            child: StreamBuilder(
-                stream: _streamList.stream,
-                builder: (context, AsyncSnapshot<List<ImageView>>? snapshot) {
-                  return ListView(
-                      children: ((snapshot != null && snapshot.data != null)
-                              ? ((snapshot.data?.isNotEmpty ?? false)
-                                  ? (snapshot.data
-                                      ?.map((e) => Container(
-                                          height: 180,
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          child: e.image))
-                                      .toList())
-                                  : [])
-                              : []) ??
-                          []);
-                }),
-          ),
-        ],
+      body: SafeArea(
+        top: true,
+        child: Column(
+          children: [
+            Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Text('Explore', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),),
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            MultiSearchView(
+              searchIndicatorShape: SearchIndicatorShape.dot,
+              onSelectItem: (value) {
+                filterList(value);
+              },
+              onSearchComplete: (value) {
+                filterList(value);
+              },
+              onDeleteAlternative: (value) {
+                filterList(value);
+              },
+              onItemDeleted: (value) {
+                print(value);
+              },
+              onSearchCleared: () {
+                removeFilter();
+              },
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Expanded(
+              child: StreamBuilder(
+                  stream: _streamList.stream,
+                  builder: (context, AsyncSnapshot<List<ImageView>>? snapshot) {
+                    return ListView(
+                        children: ((snapshot != null && snapshot.data != null)
+                                ? ((snapshot.data?.isNotEmpty ?? false)
+                                    ? (snapshot.data
+                                        ?.map((e) => Container(
+                                            height: 180,
+                                            width:
+                                                MediaQuery.of(context).size.width,
+                                            child: e.image))
+                                        .toList())
+                                    : [])
+                                : []) ??
+                            []);
+                  }),
+            ),
+          ],
+        ),
       ),
     );
   }

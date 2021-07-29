@@ -66,7 +66,7 @@ class _MultiSearchViewState extends State<MultiSearchView>
     _iconAnimationController = AnimationController(
         vsync: this,
         duration:
-            widget.slidingAnimationDuration ?? Duration(milliseconds: 1000));
+             Duration(milliseconds: 1000));
     _scrollController = new ScrollController();
     _inputController = TextEditingController();
     _focusNode = FocusNode();
@@ -182,6 +182,7 @@ class _MultiSearchViewState extends State<MultiSearchView>
     );
   }
 
+  /// update list when the user hit the keyboard search button
   Future<void> _submitContent(String value) async {
     await resetItemIndicator();
     listSearch
@@ -191,6 +192,7 @@ class _MultiSearchViewState extends State<MultiSearchView>
     _moveScrollToStart();
   }
 
+  /// clear active indicator before setting the indicator position
   Future<void> resetItemIndicator() async {
     listSearch.forEach((e) {
       if (e.isSelected?.value == true) {
@@ -199,28 +201,32 @@ class _MultiSearchViewState extends State<MultiSearchView>
     });
   }
 
+  /// hide the TextField by scrolling the the end
   void _moveScrollToEnd() {
     isSearch = !isSearch;
     new Future.delayed(Duration(seconds: 0), () {
       _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 850), curve: Curves.ease);
+          duration: widget.slidingAnimationDuration ?? Duration(milliseconds: 800), curve: Curves.ease);
     });
   }
 
+  /// show the TextField by scrolling the the beginning
   void _moveScrollToStart() {
     isSearch = !isSearch;
     new Future.delayed(Duration(seconds: 0), () {
       _scrollController
           .animateTo(_scrollController.position.minScrollExtent,
-              duration: Duration(milliseconds: 850), curve: Curves.ease)
+              duration: widget.slidingAnimationDuration ?? Duration(milliseconds: 800), curve: Curves.ease)
           .whenComplete(() => clearInputField());
     });
   }
 
+  /// well this one is clear we just reset the input text :p
   clearInputField() {
     _inputController.text = '';
   }
 
+  /// removing an item for the search list after clicking on the delete icon
   Future<int> removeItem(Searchable e) async {
     var newPosition = -1;
     newPosition = await manageSwipeIndicator(e, newPosition);
@@ -229,6 +235,7 @@ class _MultiSearchViewState extends State<MultiSearchView>
     return newPosition;
   }
 
+  /// set the indicator to a new position after deleting an item
   Future<int> manageSwipeIndicator(Searchable e, int newPosition) async {
     if (listSearch.length > 1) {
       var deletedPosition = listSearch.indexOf(e);
@@ -245,12 +252,14 @@ class _MultiSearchViewState extends State<MultiSearchView>
     return newPosition;
   }
 
+  /// this function will be triggered when you click on the search icon
   startNewSearch() {
     _isSearchIcon.value = false;
     _focusNode.requestFocus();
     _moveScrollToEnd();
   }
 
+  /// this function will be triggered when you click on the exit icon
   exitSearch() {
     _isSearchIcon.value = true;
     clearInputField();
@@ -258,6 +267,7 @@ class _MultiSearchViewState extends State<MultiSearchView>
     _moveScrollToStart();
   }
 
+  /// switching to a new search when the user select a new item
   Future<void> selectItem(Searchable e) async {
     await resetItemIndicator();
     listSearch.firstWhere((item) {
