@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -39,7 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _streamList = StreamController<List<ImageView>>();
     imagesList = getImages();
@@ -57,7 +57,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 alignment: Alignment.centerLeft,
                 child: Padding(
                   padding: const EdgeInsets.all(18.0),
-                  child: Text('Explore', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),),
+                  child: Text(
+                    'Explore',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                  ),
                 )),
             SizedBox(
               height: 20,
@@ -93,8 +96,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ? (snapshot.data
                                         ?.map((e) => Container(
                                             height: 180,
-                                            width:
-                                                MediaQuery.of(context).size.width,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
                                             child: e.image))
                                         .toList())
                                     : [])
