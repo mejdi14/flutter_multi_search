@@ -7,12 +7,18 @@ class SearchItem extends StatefulWidget {
   const SearchItem(
       {Key? key,
       required this.data,
-      this.searchIndicatorStyle,
+      this.searchIndicatorShape,
+      this.indicatorColor,
+      this.removeItemIconColor,
+      this.searchableItemTextStyle,
       required this.onDelete,
       required this.onSelect})
       : super(key: key);
   final Searchable data;
-  final SearchIndicatorStyle? searchIndicatorStyle;
+  final SearchIndicatorShape? searchIndicatorShape;
+  final Color? indicatorColor;
+  final Color? removeItemIconColor;
+  final TextStyle? searchableItemTextStyle;
   final Function onDelete;
   final Function onSelect;
 
@@ -44,7 +50,8 @@ class _SearchItemState extends State<SearchItem> {
                 ),
                 Text(
                   widget.data.label ?? '',
-                  style: TextStyle(fontSize: 20),
+                  style:
+                      widget.searchableItemTextStyle ?? TextStyle(fontSize: 20),
                 ),
                 SizedBox(
                   width: 4,
@@ -56,6 +63,7 @@ class _SearchItemState extends State<SearchItem> {
                     child: Icon(
                       Icons.close,
                       size: 15,
+                      color: widget.removeItemIconColor,
                     ))
               ],
             ),
@@ -75,14 +83,14 @@ class _SearchItemState extends State<SearchItem> {
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Container(
                         height: 7,
-                        width: widget.searchIndicatorStyle != null
-                            ? (widget.searchIndicatorStyle?.index ==
-                                    SearchIndicatorStyle.dot.index
+                        width: widget.searchIndicatorShape != null
+                            ? (widget.searchIndicatorShape?.index ==
+                                    SearchIndicatorShape.dot.index
                                 ? 7
                                 : 20)
                             : 20,
                         decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: widget.indicatorColor ?? Colors.black,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(15))),
                       ),

@@ -1,1 +1,1 @@
-enum SearchIndicatorStyle { line, dot }
+enum SearchIndicatorShape { line, dot }

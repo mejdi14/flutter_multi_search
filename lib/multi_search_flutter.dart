@@ -12,27 +12,36 @@ class MultiSearchView extends StatefulWidget {
       {Key? key,
       this.inputHint,
       this.iconColor,
-      this.hintTextStyle,
+      this.inputHintTextStyle,
       this.inputTextStyle,
       this.width,
       this.slidingAnimationDuration,
-      this.searchIndicatorStyle,
+      this.searchIndicatorShape,
+      this.indicatorColor,
+      this.removeItemIconColor,
+      this.searchableItemTextStyle,
       required this.onSelectItem,
       required this.onSearchComplete,
       required this.onDeleteAlternative,
-      required this.onItemChanged})
+      required this.onItemDeleted,
+      required this.onSearchCleared
+      })
       : super(key: key);
   final String? inputHint;
   final Color? iconColor;
-  final TextStyle? hintTextStyle;
+  final TextStyle? inputHintTextStyle;
   final TextStyle? inputTextStyle;
   final double? width;
   final Duration? slidingAnimationDuration;
-  final SearchIndicatorStyle? searchIndicatorStyle;
+  final SearchIndicatorShape? searchIndicatorShape;
+  final Color? indicatorColor;
+  final Color? removeItemIconColor;
+  final TextStyle? searchableItemTextStyle;
   final Function onSelectItem;
   final Function onSearchComplete;
   final Function onDeleteAlternative;
-  final Function onItemChanged;
+  final Function onItemDeleted;
+  final Function onSearchCleared;
 
   @override
   _MultiSearchViewState createState() => _MultiSearchViewState();
@@ -52,7 +61,6 @@ class _MultiSearchViewState extends State<MultiSearchView>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _streamList = StreamController<List<Searchable>>();
     _iconAnimationController = AnimationController(
@@ -66,7 +74,6 @@ class _MultiSearchViewState extends State<MultiSearchView>
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
@@ -97,17 +104,26 @@ class _MultiSearchViewState extends State<MultiSearchView>
                                   ? ((snapshot.data?.isNotEmpty ?? false)
                                       ? (snapshot.data
                                           ?.map((e) => SearchItem(
-                                                searchIndicatorStyle:
-                                                    widget.searchIndicatorStyle,
+                                                searchIndicatorShape:
+                                                    widget.searchIndicatorShape,
+                                                searchableItemTextStyle: widget
+                                                    .searchableItemTextStyle,
+                                                indicatorColor:
+                                                    widget.indicatorColor,
+                                                removeItemIconColor:
+                                                    widget.removeItemIconColor,
                                                 data: Searchable(
                                                     label: e.label,
                                                     isSelected: e.isSelected),
                                                 onDelete: () async {
                                                   var pos = await removeItem(e);
-                                                  widget.onDeleteAlternative(e.label);
+                                                  widget.onItemDeleted(
+                                                      e.label);
                                                   if (pos > -1)
-                                                    widget.onItemChanged(
+                                                    widget.onDeleteAlternative(
                                                         listSearch[pos].label);
+                                                  else
+                                                    widget.onSearchCleared();
                                                 },
                                                 onSelect: (data) {
                                                   selectItem(e);
@@ -134,7 +150,7 @@ class _MultiSearchViewState extends State<MultiSearchView>
                       textInputAction: TextInputAction.search,
                       decoration: InputDecoration(
                           border: InputBorder.none,
-                          hintStyle: widget.hintTextStyle,
+                          hintStyle: widget.inputHintTextStyle,
                           hintText: widget.inputHint ?? "Search"),
                       style: widget.inputTextStyle ??
                           TextStyle(
@@ -213,17 +229,17 @@ class _MultiSearchViewState extends State<MultiSearchView>
     return newPosition;
   }
 
-  Future<int> manageSwipeIndicator(Searchable e, int newPosition) async{
-     if (listSearch.length > 1) {
+  Future<int> manageSwipeIndicator(Searchable e, int newPosition) async {
+    if (listSearch.length > 1) {
       var deletedPosition = listSearch.indexOf(e);
-      if(e.isSelected?.value == true){
-      if (deletedPosition == 0) {
-        listSearch[1].isSelected = ValueNotifier<bool>(true);
-        newPosition = 0;
-      } else {
-        newPosition = deletedPosition - 1;
-        listSearch[newPosition].isSelected = ValueNotifier<bool>(true);
-      }
+      if (e.isSelected?.value == true) {
+        if (deletedPosition == 0) {
+          listSearch[1].isSelected = ValueNotifier<bool>(true);
+          newPosition = 0;
+        } else {
+          newPosition = deletedPosition - 1;
+          listSearch[newPosition].isSelected = ValueNotifier<bool>(true);
+        }
       }
     }
     return newPosition;
@@ -253,11 +269,10 @@ class _MultiSearchViewState extends State<MultiSearchView>
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    super.dispose();
     _streamList.sink.close();
     _iconAnimationController.dispose();
     _scrollController.dispose();
     _focusNode.dispose();
+    super.dispose();
   }
 }
