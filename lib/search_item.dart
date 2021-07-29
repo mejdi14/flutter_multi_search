@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_search_flutter/search_indicator_style_enum.dart';
 import 'package:multi_search_flutter/searchable.dart';
 
 class SearchItem extends StatefulWidget {
   const SearchItem(
       {Key? key,
       required this.data,
+      this.searchIndicatorStyle,
       required this.onDelete,
       required this.onSelect})
       : super(key: key);
   final Searchable data;
+  final SearchIndicatorStyle? searchIndicatorStyle;
   final Function onDelete;
   final Function onSelect;
 
@@ -25,7 +28,9 @@ class _SearchItemState extends State<SearchItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           GestureDetector(
             onTap: () {
               widget.data.isSelected?.value =
@@ -70,10 +75,16 @@ class _SearchItemState extends State<SearchItem> {
                       padding: const EdgeInsets.only(left: 10.0),
                       child: Container(
                         height: 7,
-                        width: 20,
+                        width: widget.searchIndicatorStyle != null
+                            ? (widget.searchIndicatorStyle?.index ==
+                                    SearchIndicatorStyle.dot.index
+                                ? 7
+                                : 20)
+                            : 20,
                         decoration: BoxDecoration(
                             color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(15))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
                       ),
                     ),
                   ),

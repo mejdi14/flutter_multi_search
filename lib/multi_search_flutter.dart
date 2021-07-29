@@ -3,6 +3,7 @@ library multi_search_flutter;
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_search_flutter/search_indicator_style_enum.dart';
 import 'package:multi_search_flutter/search_item.dart';
 import 'package:multi_search_flutter/searchable.dart';
 
@@ -15,9 +16,10 @@ class MultiSearchView extends StatefulWidget {
       this.inputTextStyle,
       this.width,
       this.slidingAnimationDuration,
+      this.searchIndicatorStyle,
       required this.onSelectItem,
       required this.onSearchComplete,
-      required this.onDeleteItem,
+      required this.onDeleteAlternative,
       required this.onItemChanged})
       : super(key: key);
   final String? inputHint;
@@ -26,9 +28,10 @@ class MultiSearchView extends StatefulWidget {
   final TextStyle? inputTextStyle;
   final double? width;
   final Duration? slidingAnimationDuration;
+  final SearchIndicatorStyle? searchIndicatorStyle;
   final Function onSelectItem;
   final Function onSearchComplete;
-  final Function onDeleteItem;
+  final Function onDeleteAlternative;
   final Function onItemChanged;
 
   @override
@@ -94,12 +97,14 @@ class _MultiSearchViewState extends State<MultiSearchView>
                                   ? ((snapshot.data?.isNotEmpty ?? false)
                                       ? (snapshot.data
                                           ?.map((e) => SearchItem(
+                                                searchIndicatorStyle:
+                                                    widget.searchIndicatorStyle,
                                                 data: Searchable(
                                                     label: e.label,
                                                     isSelected: e.isSelected),
-                                                onDelete: () {
-                                                  var pos = removeItem(e);
-                                                  widget.onDeleteItem(e.label);
+                                                onDelete: () async {
+                                                  var pos = await removeItem(e);
+                                                  widget.onDeleteAlternative(e.label);
                                                   if (pos > -1)
                                                     widget.onItemChanged(
                                                         listSearch[pos].label);
@@ -200,10 +205,18 @@ class _MultiSearchViewState extends State<MultiSearchView>
     _inputController.text = '';
   }
 
-  int removeItem(Searchable e) {
+  Future<int> removeItem(Searchable e) async {
     var newPosition = -1;
-    if (listSearch.length > 1) {
+    newPosition = await manageSwipeIndicator(e, newPosition);
+    listSearch.remove(e);
+    _streamList.sink.add(listSearch);
+    return newPosition;
+  }
+
+  Future<int> manageSwipeIndicator(Searchable e, int newPosition) async{
+     if (listSearch.length > 1) {
       var deletedPosition = listSearch.indexOf(e);
+      if(e.isSelected?.value == true){
       if (deletedPosition == 0) {
         listSearch[1].isSelected = ValueNotifier<bool>(true);
         newPosition = 0;
@@ -211,9 +224,8 @@ class _MultiSearchViewState extends State<MultiSearchView>
         newPosition = deletedPosition - 1;
         listSearch[newPosition].isSelected = ValueNotifier<bool>(true);
       }
+      }
     }
-    listSearch.remove(e);
-    _streamList.sink.add(listSearch);
     return newPosition;
   }
 

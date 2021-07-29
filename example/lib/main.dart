@@ -1,8 +1,7 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:multi_search_flutter/multi_search_flutter.dart';
+import 'package:multi_search_flutter/search_indicator_style_enum.dart';
 
 void main() {
   runApp(MyApp());
@@ -49,16 +48,17 @@ class _MyHomePageState extends State<MyHomePage> {
             height: 40,
           ),
           MultiSearchView(
+            searchIndicatorStyle: SearchIndicatorStyle.dot,
             onSelectItem: (value) {
               print(value);
             },
-            onSearchComplete: (value){
+            onSearchComplete: (value) {
               print(value);
             },
-            onDeleteItem: (value){
+            onDeleteAlternative: (value) {
               print(value);
             },
-            onItemChanged: (value){
+            onItemChanged: (value) {
               print(' on changed $value');
             },
           )
