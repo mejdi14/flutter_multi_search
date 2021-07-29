@@ -66,7 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 20,
             ),
             MultiSearchView(
-              searchIndicatorShape: SearchIndicatorShape.dot,
+              inputHint: 'type your text',
               onSelectItem: (value) {
                 filterList(value);
               },

@@ -27,7 +27,7 @@ class MultiSearchView extends StatefulWidget {
       required this.onSearchCleared
       })
       : super(key: key);
-  final String? inputHint;
+    final String? inputHint;
   final Color? iconColor;
   final TextStyle? inputHintTextStyle;
   final TextStyle? inputTextStyle;
