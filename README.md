@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/multi_search.png" height="300" width="300" >
+<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/mutli_search.png" height="300" width="300" >
 	</p>
 	
 ## :art:Credits
@@ -20,7 +20,7 @@
 
 ## ✨ Demo
 <p align="center">
-<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/multisearch.gif" height="600" width="400" >
+<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/multisearch.gif" height="800" width="400" >
 	</p>
 	
 	
