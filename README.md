@@ -11,9 +11,6 @@
   </a>
 </p>
 
-<p align="center">
-<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/mutli_search.png" height="300" width="300" >
-	</p>
 	
 ## :art:Credits
 - Many thanks to : [@Cuberto](https://dribbble.com/shots/3971202-Info-navigation) for the amazing [@design](https://dribbble.com/shots/5922034-Multi-search-by-categories) 
@@ -21,7 +18,7 @@
 
 ## ✨ Demo
 <p align="center">
-<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/multisearch-_1_.gif" height="800" width="400" >
+<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/multisearch-_1_.gif" height="800" width="800" >
 	</p>
 	
 	
