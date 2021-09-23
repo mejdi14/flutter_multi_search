@@ -18,7 +18,7 @@
 
 ## ✨ Demo
 <p align="center">
-<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/multisearch-_1_.gif" height="800" width="800" >
+<img src="https://raw.githubusercontent.com/mejdi14/flutter_multi_search/master/images/multisearch-_1_.gif" height="600" width="800" >
 	</p>
 	
 	
